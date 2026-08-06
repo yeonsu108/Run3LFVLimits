@@ -2,32 +2,34 @@
 
 We base the toolbox on FCNC analysis limit toolbox.
 
-Toolbox to derive upper limits for 2016/2017/2018  LFV TOP analysis
+Toolbox to derive upper limits for Run3 (2022, 2022EE, 2023, 2023BPix, and 2024) LFV TOP analysis
 # Installation
 ```
-cmsrel CMSSW_10_2_13
-cd CMSSW_10_2_13/src
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+cmsrel CMSSW_14_1_0_pre4
+cd CMSSW_14_1_0_pre4/src
 cmsenv
+
 git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
 cd HiggsAnalysis/CombinedLimit
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
-git fetch origin
-git checkout v8.2.0
 scramv1 b clean; scramv1 b # always make a clean build
 
 cd $CMSSW_BASE/src
 git clone https://github.com/cms-analysis/CombineHarvester.git CombineHarvester
 cd CombineHarvester
-git checkout 128e41eb70e12754cf084eb1eea622fe3722532b
+git checkout v3.0.0-pre1
+scram b
+
 cd -
 mkdir UserCode
 cd UserCode
-git clone https://github.com/easilar/LFVTOPLimits.git LFVTOPLimits
+git clone https://github.com/yeonsu108/Run3LFVLimits
 cd $CMSSW_BASE/src
 scram b -j 4
 
-cd UserCode/LFVTOPLimits
-git clone git@github.com:minerva1993/plotIt.git
+cd UserCode/Run3LFVLimits
+git clone https://github.com/yeonsu108/plotIt.git
 cd plotIt/external
 source build-external.sh
 cd ..
@@ -96,8 +98,8 @@ All the `xsec.yml` contain the cross section and number of generated events used
 
 # Run 2 combination
 One line:
-`source run_everything_forRun2.sh tag`
+`source run_everything_forRun3.sh tag`
 
 In detail:
-`run_everything_forRun2.sh` read datacards defined as `-p16pre/-p16post/17/17` and generate output folder with merged datacards. Then run limit, pull, impact in the directory
+`run_everything_forRun3.sh` read datacards defined as `-p22/-p22EE/-p23/-p23BPix/-p24` and generate output folder with merged datacards. Then run limit, pull, impact in the directory
 
