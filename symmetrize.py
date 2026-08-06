@@ -15,7 +15,7 @@ def smoothing(hin, hnom):
     x_vals = np.arange(htmp.GetNbinsX())
     y_vals = np.zeros(htmp.GetNbinsX())
 
-    for i in xrange(htmp.GetNbinsX()):
+    for i in range(htmp.GetNbinsX()):
         y_vals[i] = htmp.GetBinContent(i+1)
 
     #local linear regression (locally weighted polynomial regression)
@@ -25,7 +25,7 @@ def smoothing(hin, hnom):
 
     #print y_vals
     ##averaging smoothign
-    #for i in xrange(htmp.GetNbinsX()):
+    #for i in range(htmp.GetNbinsX()):
     #  if i == 0: y_vals[i] = htmp.GetBinContent(i+1)
     #  elif i > 0 and i < htmp.GetNbinsX() - 1: y_vals[i] = (htmp.GetBinContent(i) + htmp.GetBinContent(i+1) + htmp.GetBinContent(i+2))/3
     #  elif i == htmp.GetNbinsX() - 1: y_vals[i] = (htmp.GetBinContent(i) + htmp.GetBinContent(i+1))/2
@@ -42,7 +42,7 @@ def smoothing(hin, hnom):
 
 
     for x_position in x_vals:
-        hin.SetBinContent(x_position+1, max(0, smoothed_vals[x_position]*hnom.GetBinContent(x_position+1)))
+        hin.SetBinContent(int(x_position+1), max(0, smoothed_vals[x_position]*hnom.GetBinContent(int(x_position+1))))
         #hin.SetBinContent(x_position+1, max(0, y_vals[x_position]*hnom.GetBinContent(x_position+1)))
         #hin.SetBinContent(x_position+1, max(0, smoothed_vals[x_position]*hnom.GetBinContent(x_position+1)))
 
@@ -51,7 +51,7 @@ def smoothing(hin, hnom):
 
 def symmetrize(var, var_opp, nom):
 
-    for xbin in xrange(var.GetNbinsX()):
+    for xbin in range(var.GetNbinsX()):
         if xbin == 0: continue #test: skip first bin
         if nom.GetBinContent(xbin+1) == 0: ratio = 1.
         else:

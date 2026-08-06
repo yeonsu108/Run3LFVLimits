@@ -17,7 +17,7 @@ for signal_folder in signal_folders:
         print("Found no limit script in directory %s"%os.path.join(datacard_path, signal_folder))
     for limit_script in limit_scripts:
         #if 'fullComb' in datacard_path and not 'all' in limit_script: continue
-        if 'fullComb' in datacard_path and not '161718_all' in limit_script and not 'comb' in datacard_path: continue
+        if 'fullComb' in datacard_path and not '222324_all' in limit_script and not 'comb' in datacard_path: continue
         print("Executing %s"%limit_script)
         call(['bash', limit_script])
     os.chdir(current_dir)

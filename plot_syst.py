@@ -38,10 +38,10 @@ def drawRatio(c, nom, up, dn):
     tmp_min = min(minmax)
     if tmp_min < 0.01:
         nbins = ratio_up.GetNbinsX()
-        contents_org = [ratio_up.GetBinContent(x) for x in xrange(nbins)]
-        contents_org.extend([ratio_dn.GetBinContent(x) for x in xrange(nbins)])
+        contents_org = [ratio_up.GetBinContent(x) for x in range(nbins)]
+        contents_org.extend([ratio_dn.GetBinContent(x) for x in range(nbins)])
         contents = contents_org[:]
-        #for i in xrange(len(contents_org)):
+        #for i in range(len(contents_org)):
         #    if contents_org[i] < 0.1: contents.remove(contents_org[i])
         tmp_min = min(contents)
     ratio_up.GetYaxis().SetRangeUser(tmp_min*0.85, max(minmax)*1.15)
@@ -113,10 +113,10 @@ def drawComp(c, nom, up, dn, lowstat):
     tmp_min = min(minmax)
     if tmp_min < 0.01:
         nbins = ratio_up.GetNbinsX()
-        contents_org = [ratio_up.GetBinContent(x) for x in xrange(nbins)]
-        contents_org.extend([ratio_dn.GetBinContent(x) for x in xrange(nbins)])
+        contents_org = [ratio_up.GetBinContent(x) for x in range(nbins)]
+        contents_org.extend([ratio_dn.GetBinContent(x) for x in range(nbins)])
         contents = contents_org[:]
-        for i in xrange(len(contents_org)):
+        for i in range(len(contents_org)):
             if contents_org[i] < 0.01: contents.remove(contents_org[i])
         tmp_min = min(contents)
     ratio_up.GetYaxis().SetRangeUser(tmp_min*0.97, max(minmax)*1.03)

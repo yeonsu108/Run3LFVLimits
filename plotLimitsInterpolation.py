@@ -19,7 +19,8 @@ print options.limitfolder
 
 postfix = ''
 
-signal_Xsec = {'st_lfv_cs': 6.4, 'st_lfv_cv': 41.0, 'st_lfv_ct': 225.2, 'st_lfv_us': 61.83, 'st_lfv_uv': 297.6, 'st_lfv_ut': 1401}
+#signal_Xsec = {'st_lfv_cs': 6.4, 'st_lfv_cv': 41.0, 'st_lfv_ct': 225.2, 'st_lfv_us': 61.83, 'st_lfv_uv': 297.6, 'st_lfv_ut': 1401}
+signal_Xsec = {'st_lfv_cs':7.863,'st_lfv_ct':266.815,'st_lfv_cv':48.967,'st_lfv_uv':376.644,'st_lfv_ut':1751.6,'st_lfv_us':79.226}
 signal_lorentz_dict = OrderedDict()
 #signal_lorentz_dict = {'s': kRed+1, 'v': kGreen+2, 't': kBlue+1}
 signal_lorentz_dict['s'] = kRed+1
@@ -95,7 +96,7 @@ def br(op, ut_limit, ct_limit, pos, arrX, arrY, to_print):
         if to_print: print pos, op, ' : br -> ', br_x, br_y
 
 
-for i in xrange(200000):
+for i in range(200000):
     x_pos = 0.0001 * i
     #x_pos = 0.000005 * i
 
@@ -109,7 +110,7 @@ for i in xrange(200000):
 
 
 #Unc band requires high gran.
-for i in xrange(200000):
+for i in range(200000):
     x_pos = 0.000005 * i
 
     to_print = False
@@ -155,7 +156,7 @@ for signal_lorentz in signal_lorentz_dict:
     print 'ut exp -1sig Wilson ',  x_coup_one_dn[signal_lorentz][-1], 'ct exp kappa', y_coup_one_dn[signal_lorentz][0]
 
     g_coup_one_band[signal_lorentz] = TGraph(len(x_coup_one_up[signal_lorentz])+len(x_coup_one_dn[signal_lorentz]))
-    for i in xrange(len(x_coup_one_up[signal_lorentz])):
+    for i in range(len(x_coup_one_up[signal_lorentz])):
         g_coup_one_band[signal_lorentz].SetPoint(i, x_coup_one_up[signal_lorentz][i], y_coup_one_up[signal_lorentz][i]);
         if len(x_coup_one_up[signal_lorentz]) + i < len(x_coup_one_up[signal_lorentz])+len(x_coup_one_dn[signal_lorentz]):
             g_coup_one_band[signal_lorentz].SetPoint(len(x_coup_one_up[signal_lorentz]) + i , x_coup_one_dn[signal_lorentz][len(x_coup_one_dn[signal_lorentz])-i-1], y_coup_one_dn[signal_lorentz][len(x_coup_one_dn[signal_lorentz])-i-1]);
@@ -282,7 +283,7 @@ for signal_lorentz in signal_lorentz_dict:
     g_br_obs[signal_lorentz] = TGraph(len(x_br_obs[signal_lorentz]), x_br_obs[signal_lorentz], y_br_obs[signal_lorentz])
 
     g_br_one_band[signal_lorentz] = TGraph(len(x_br_one_up[signal_lorentz])+len(x_br_one_dn[signal_lorentz]))
-    for i in xrange(len(x_br_one_up[signal_lorentz])):
+    for i in range(len(x_br_one_up[signal_lorentz])):
         g_br_one_band[signal_lorentz].SetPoint(i, x_br_one_up[signal_lorentz][i], y_br_one_up[signal_lorentz][i]);
         if len(x_br_one_up[signal_lorentz]) + i < len(x_br_one_up[signal_lorentz])+len(x_br_one_dn[signal_lorentz]):
             g_br_one_band[signal_lorentz].SetPoint(len(x_br_one_up[signal_lorentz]) + i , x_br_one_dn[signal_lorentz][len(x_br_one_dn[signal_lorentz])-i-1], y_br_one_dn[signal_lorentz][len(x_br_one_dn[signal_lorentz])-i-1]);

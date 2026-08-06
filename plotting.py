@@ -281,7 +281,7 @@ def CreateTransparentColor(color, alpha):
 
 
 def Set(obj, **kwargs):
-    for key, value in six.iteritems(kwargs):
+    for key, value in six.items(kwargs):
         if value is None:
             getattr(obj, "Set" + key)()
         elif isinstance(value, (list, tuple)):
@@ -728,7 +728,7 @@ def LimitTGraphFromJSON(js, label):
 
 def LimitTGraphFromJSONFile(jsfile, label):
     with open(jsfile) as jsonfile:
-        js = json.load(jsonfile)
+        js = json.safe_load(jsonfile)
     return LimitTGraphFromJSON(js, label)
 
 
@@ -755,7 +755,7 @@ def ToyTGraphFromJSON(js, label):
 
 def ToyTGraphFromJSONFile(jsfile, label):
     with open(jsfile) as jsonfile:
-        js = json.load(jsonfile)
+        js = json.safe_load(jsonfile)
     return ToyTGraphFromJSON(js, label)
 
 
@@ -778,7 +778,7 @@ def StandardLimitsFromJSONFile(json_file, draw=["obs", "exp0", "exp1", "exp2"]):
     graphs = {}
     data = {}
     with open(json_file) as jsonfile:
-        data = json.load(jsonfile)
+        data = json.safe_load(jsonfile)
     if "obs" in draw:
         graphs["obs"] = LimitTGraphFromJSON(data, "obs")
     if "exp0" in draw or "exp" in draw:

@@ -12,7 +12,7 @@ def drawEffVsCutCurve(myTH1, total = 0):
     totintegral = myTH1.Integral()
     effV = [ integral/totintegral ]
 
-    for i in xrange(2, myTH1.GetNbinsX()):
+    for i in range(2, myTH1.GetNbinsX()):
         discrV.append(myTH1.GetBinLowEdge(i))
         integral -= myTH1.GetBinContent(i-1)
         effV.append(integral/totintegral)
@@ -74,7 +74,7 @@ def drawFigMeritVsCutCurve(bkgTH1, sigTH1, total = 0): # Not implemented
     discrV = [ ]
     effV = [ ]
 
-    for i in xrange(1, bkgTH1.GetNbinsX() + 1):
+    for i in range(1, bkgTH1.GetNbinsX() + 1):
         discrV.append(bkgTH1.GetBinLowEdge(i))
         nBkg = bkgTH1.Integral(i, bkgTH1.GetNbinsX() + 1)
         if nBkg < 0:

@@ -27,7 +27,7 @@ def getBinning(partial_name, th1_rootFileName, coupling):
     nbins = sig_th1.GetNbinsX()
     significances = []
 
-    for i in xrange(nbins): #bin = 1 ~ nbins
+    for i in range(nbins): #bin = 1 ~ nbins
         #tmp_sig = sig_th1.Integral(1,i+1)
         #tmp_bkg = bkg_th1.Integral(1,i+1)
         tmp_sig = sig_th1.Integral(i+1,nbins)

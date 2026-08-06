@@ -4,15 +4,17 @@ import math
 
 limitfolder = sys.argv[1]
 year = ""
-for y_ in ["2016pre", "2016post", "2017", "2018", "Run2"]:
+#for y_ in ["2016pre", "2016post", "2017", "2018", "Run2"]:
+for y_ in ["2022","2022EE","2023","2023BPix","2024","Run3"]:
     if y_ in limitfolder: year = y_
-    if year == "Run2": year = "2"
+    if year == "Run3": year = "3"
 
 
 # for limit rescaling if the signal Xsec inseted in combine was not 1 pb
 #signal_Xsec = {'st_lfv_cs': 10.09, 'st_lfv_cv': 58.3, 'st_lfv_ct': 307.4, 'st_lfv_us': 86.49, 'st_lfv_uv': 414.5, 'st_lfv_ut': 1925}
 # For SMEFTsim cross sections, but TT are always 2.69, 21.5, 129 for s, v, t
-signal_Xsec = {'st_lfv_cs': 6.4, 'st_lfv_cv': 41.0, 'st_lfv_ct': 225.2, 'st_lfv_us': 61.83, 'st_lfv_uv': 297.6, 'st_lfv_ut': 1401}
+#signal_Xsec = {'st_lfv_cs': 6.4, 'st_lfv_cv': 41.0, 'st_lfv_ct': 225.2, 'st_lfv_us': 61.83, 'st_lfv_uv': 297.6, 'st_lfv_ut': 1401}
+signal_Xsec = {'st_lfv_cs':7.863,'st_lfv_ct':266.815,'st_lfv_cv':48.967,'st_lfv_uv':376.644,'st_lfv_ut':1751.6,'st_lfv_us':79.226}
 
 def calcXsec(signal, limits):
     xsec = list(np.around(np.array(limits) * signal_Xsec[signal], decimals=3))

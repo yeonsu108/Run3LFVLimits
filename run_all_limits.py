@@ -7,7 +7,7 @@ current_dir = os.getcwd()
 datacard_path = sys.argv[1]
 
 try:
-    if any(i in sys.argv[2] for i in ['16pre16post1718']): years = sys.argv[2]
+    if any(i in sys.argv[2] for i in ['22EE23BPix24']): years = sys.argv[2]
 except: years = ''
 
 signal_folders = [folder for folder in os.listdir(datacard_path) if os.path.isdir(os.path.join(datacard_path, folder))]
@@ -20,7 +20,7 @@ for signal_folder in signal_folders:
         print("Found no limit script in directory %s"%os.path.join(datacard_path, signal_folder))
     for limit_script in limit_scripts:
         #if 'fullComb' in datacard_path and not 'all' in limit_script: continue
-        if 'fullComb' in datacard_path and not '16pre16post1718' in limit_script and len(years) < 1: continue
+        if 'fullComb' in datacard_path and not '22EE23BPix24' in limit_script and len(years) < 1: continue
         elif 'fullComb' in datacard_path and len(years) > 1 and (not 'all' in limit_script or not '_'+years+'_' in limit_script): continue
         print("Executing %s"%limit_script)
         call(['bash', limit_script])

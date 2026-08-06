@@ -20,7 +20,7 @@ options = parser.parse_args()
 postfix = ''
 print("options.printlimits" , options.printlimits)
 if options.printlimits:
-    options.category_order = ['161718_all', '1617_all', '1718_all']
+    options.category_order = ['222324_all', '2223_all', '2324_all']
     #options.category_order = ['1718_all']
     options.category_labels = options.category_order
     postfix = '_add'
@@ -33,7 +33,8 @@ ROOT.gROOT.SetBatch()
 #    Excluded couping ---> ExcBr: BR(t --> Hq) = Width(t --> Hq)* Khqt^2/TotalWidth = 0.19*Khqt^2/1.32158
 #    <--> BR(t --> Hq) < XsecExcl*0.19/(sigXsecDivK2 * 1.32158)
 
-signal_Xsec = {'st_lfv_cs':10.09,'st_lfv_ct':307.4,'st_lfv_cv':58.3,'st_lfv_uv':414.5,'st_lfv_ut':1925,'st_lfv_us':86.49}  # for limit rescaling if the signal Xsec inseted in combine was not 1 pb
+#signal_Xsec = {'st_lfv_cs':10.09,'st_lfv_ct':307.4,'st_lfv_cv':58.3,'st_lfv_uv':414.5,'st_lfv_ut':1925,'st_lfv_us':86.49}  # for limit rescaling if the signal Xsec inseted in combine was not 1 pb
+signal_Xsec = {'st_lfv_cs':7.863,'st_lfv_ct':266.815,'st_lfv_cv':48.967,'st_lfv_uv':376.644,'st_lfv_ut':1751.6,'st_lfv_us':79.226}  # for limit rescaling if the signal Xsec inseted in combine was not 1 pb
 
 def calcXsec(signal,limits):
     return list(np.array(limits) * signal_Xsec[signal])
@@ -216,7 +217,7 @@ for signal_folder in signal_folders:
     dict_cat_limits = {}
     for category in options.category_order:
         print("CAtegory : " , category)
-        limit_rootfiles = [rootfile for rootfile in os.listdir(signal_folder_path) if rootfile.startswith('higgsCombineTOP_LFV') and category in rootfile and ( (not options.printlimits and not any(t in rootfile for t in ['_1617_', '_1718_'])) or (options.printlimits and any(t in rootfile for t in [signal_folder+'_'+category])) )]
+        limit_rootfiles = [rootfile for rootfile in os.listdir(signal_folder_path) if rootfile.startswith('higgsCombineTOP_LFV') and category in rootfile and ( (not options.printlimits and not any(t in rootfile for t in ['_2223_', '_2324_'])) or (options.printlimits and any(t in rootfile for t in [signal_folder+'_'+category])) )]
         print("LIMIT ROOT FILES : " , limit_rootfiles)
         found_category = False
         for limit_rootfile in limit_rootfiles:

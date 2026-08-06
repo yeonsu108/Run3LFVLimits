@@ -64,7 +64,7 @@ for training_string in training_strings:
                     th1_down = th1.Clone(new_th1_name + '__' + key + 'down')
                     th1_up.Add(th1, -1)
                     th1_down.Add(th1, -1)
-                    for n in xrange(1, th1.GetNbinsX()+1):
+                    for n in range(1, th1.GetNbinsX()+1):
                         th1_up.SetBinError(n,0) #set to 0
                         th1_down.SetBinError(n,0)
                     #th1_up.Sumw2() #already done

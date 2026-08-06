@@ -40,7 +40,7 @@ for k in file.GetListOfKeys():
     channels.add('_'.join(name))
 
 channels = list(channels)
-print "Detected channels: ", channels
+print ("Detected channels: ", channels)
 
 
 # Construct the list of processs
@@ -52,7 +52,7 @@ total_unc = ['tt_postfit_histos__totalup','tt_postfit_histos__totaldown']
 for proc in file.Get('%s_prefit' % channels[0]).GetListOfKeys():
     processs.add(proc.GetName())
 
-print 'Detected processes: ', processs
+print ('Detected processes: ', processs)
 
 output_dir = 'postfit_shapes_TOP_LFV_forPlotIt'
 
@@ -64,18 +64,18 @@ print("Creating ROOT files suitable for plotIt...")
 
 # Prepare shapes for plotIt
 for process in processs:
-    print "Process: ", process
+    print ("Process: ", process)
 
     output_filename = "%s_postfit_histos.root" % (process)
     plot_file = TFile.Open(os.path.join(output_dir, output_filename), 'recreate')
     for channel in channels:
-        # print "    Channel : ", channel
+        # print ("    Channel : ", channel)
         # Nominal post-fit shape
         nominal_postfit = file.Get('%s_postfit/%s' % (channel, process))
         try:
             nominal_postfit.SetName(channel)
             nominal_postfit.Write()
-            print "    Channel : ", channel
+            print ("    Channel : ", channel)
 
             if process != 'data_obs':# and not process.startswith('Hct') and not process.startswith('Hut'):
                 nominal_postfit_up = nominal_postfit.Clone()
@@ -97,12 +97,12 @@ for process in processs:
 
     if 'TotalBkg' in process:
         for t in total_unc:
-            print "Process: ", str(t.split('__')[1])
+            print ("Process: ", str(t.split('__')[1]))
 
             output_filename = "%s.root" % (t)
             plot_file = TFile.Open(os.path.join(output_dir, output_filename), 'recreate')
             for channel in channels:
-                print "    Channel : ", channel
+                print ("    Channel : ", channel)
                 if 'up' in t:
                     tot = file.Get('%s_postfit/%s' % (channel, process))
                     nom = file.Get('%s_postfit/%s' % (channel, 'tt'))

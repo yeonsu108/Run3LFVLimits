@@ -7,7 +7,7 @@ from collections import OrderedDict
 from subprocess import check_call
 
 # to prevent pyroot to hijack argparse we need to go around
-tmpargv = sys.argv[:] 
+tmpargv = sys.argv[:]
 sys.argv = []
 
 # ROOT imports
@@ -17,30 +17,33 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 sys.argv = tmpargv
 
 cmssw_base = os.environ['CMSSW_BASE']
-base_path = os.path.join(cmssw_base, 'src/UserCode/LFVTOPLimits')
+base_path = os.path.join(cmssw_base, 'src/UserCode/LFVTOPLimits_v2')
 
 parser = argparse.ArgumentParser(description='Create shape datacards ready for combine')
 
-parser.add_argument('-p16pre', '--path16pre', action='store', dest='path_16pre', type=str, default='datacards_2016pre', help='Path to 2016pre datacard folder')
-parser.add_argument('-p16post', '--path16post', action='store', dest='path_16post', type=str, default='datacards_2016post', help='Path to 2016post datacard folder')
-parser.add_argument('-p17', '--path17', action='store', dest='path_17', type=str, default='datacards_2017', help='Path to 2017 datacard folder')
-parser.add_argument('-p18', '--path18', action='store', dest='path_18', type=str, default='datacards_2018', help='Path to 2018 datacard folder')
-parser.add_argument('-o', '--output', action='store', dest='output', type=str, default='fullRun2Comb', help='Output directory, please follow convention to distunguish input cards')
+parser.add_argument('-p22',     '--path22',     action='store', dest='path_22',     type=str, default='datacards_2022',     help='Path to 2022 datacard folder')
+parser.add_argument('-p22EE',   '--path22EE',   action='store', dest='path_22EE',   type=str, default='datacards_2022EE',   help='Path to 2022EE datacard folder')
+parser.add_argument('-p23',     '--path23',     action='store', dest='path_23',     type=str, default='datacards_2023',     help='Path to 2023 datacard folder')
+parser.add_argument('-p23BPix', '--path23BPix', action='store', dest='path_23BPix', type=str, default='datacards_2023BPix', help='Path to 2023BPix datacard folder')
+parser.add_argument('-p24',     '--path24',     action='store', dest='path_24',     type=str, default='datacards_2024',     help='Path to 2024 datacard folder')
+parser.add_argument('-o', '--output', action='store', dest='output', type=str, default='fullRun3Comb', help='Output directory, please follow convention to distunguish input cards')
 parser.add_argument('--nosys', action='store', dest='nosys', default=False, help='Consider or not systematic uncertainties')
 
 options = parser.parse_args()
 
-years = ['16pre16post1718']
+years = ['22EE23BPix24']
 signals = ['st_lfv_cs', 'st_lfv_ct', 'st_lfv_cv', 'st_lfv_us', 'st_lfv_ut', 'st_lfv_uv']
 #signals = ['st_lfv_uv'] #for control plots postfit
-if cmssw_base not in options.path_16pre:
-    options.path_16pre = os.path.join(base_path, options.path_16pre)
-if cmssw_base not in options.path_16post:
-    options.path_16post = os.path.join(base_path, options.path_16post)
-if cmssw_base not in options.path_17:
-    options.path_17 = os.path.join(base_path, options.path_17)
-if cmssw_base not in options.path_18:
-    options.path_18 = os.path.join(base_path, options.path_18)
+if cmssw_base not in options.path_22:
+    options.path_22 = os.path.join(base_path, options.path_22)
+if cmssw_base not in options.path_22EE:
+    options.path_22EE = os.path.join(base_path, options.path_22EE)
+if cmssw_base not in options.path_23:
+    options.path_23 = os.path.join(base_path, options.path_23)
+if cmssw_base not in options.path_23BPix:
+    options.path_23BPix = os.path.join(base_path, options.path_23BPix)
+if cmssw_base not in options.path_24:
+    options.path_24 = os.path.join(base_path, options.path_24)
 if cmssw_base not in options.output:
     options.output = os.path.join(base_path, options.output)
 
@@ -61,10 +64,11 @@ for signal in signals:
         card_name = 'TOP_LFV_{}_Discriminant_DNN_{}.dat'.format(signal, signal)
         print("card name : " , card_name)
         command_string = 'combineCards.py'
-        if '16pre' in year: command_string += ' year_2016pre=' + os.path.join(options.path_16pre, signal, card_name)
-        if '16post' in year: command_string += ' year_2016post=' + os.path.join(options.path_16post, signal, card_name)
-        if '17' in year: command_string += ' year_2017=' + os.path.join(options.path_17, signal, card_name)
-        if '18' in year: command_string += ' year_2018=' + os.path.join(options.path_18, signal, card_name)
+        if '22'     in year: command_string += ' year_2022='     + os.path.join(options.path_22,     signal, card_name)
+        if '22EE'   in year: command_string += ' year_2022EE='   + os.path.join(options.path_22EE,   signal, card_name)
+        if '23'     in year: command_string += ' year_2023='     + os.path.join(options.path_23,     signal, card_name)
+        if '23BPix' in year: command_string += ' year_2023BPix=' + os.path.join(options.path_23BPix, signal, card_name)
+        if '24'     in year: command_string += ' year_2024='     + os.path.join(options.path_24,     signal, card_name)
         command_string += ' > TOP_LFV_{}_Discriminant_DNN_{}_{}.dat'.format(signal, signal, year)
         check_call(command_string, shell=True)
         output_prefix_list.append('TOP_LFV_{}_Discriminant_DNN_{}_{}'.format(signal, signal, year))
@@ -79,8 +83,8 @@ for signal in signals:
     # Write card
     for output_prefix in output_prefix_list:
         year = output_prefix.split('_')[10]
-        if year == '16pre16post1718':
-            year = 'Run2'
+        if year == '22EE23BPix24':
+            year = 'Run3'
         output_dir = os.path.join(options.output, signal)
         datacard = os.path.join(output_dir, output_prefix + '.dat')
         workspace_file = os.path.basename( os.path.join(output_dir, output_prefix + '_combine_workspace.root') )
@@ -97,8 +101,8 @@ text2workspace.py {datacard} -m {fake_mass} -o {workspace_root}
 
 # Run limit
 
-echo combine -M AsymptoticLimits -n {name} {workspace_root} #--run blind #-v +2
-combine -M AsymptoticLimits -n {name} {workspace_root} --rMin -1 --rMax 1 --rAbsAcc 0.0000005 --cminDefaultMinimizerStrategy 0  #-v +2
+echo combine -M AsymptoticLimits -n {name} {workspace_root} --run blind #-v +2
+combine -M AsymptoticLimits -n {name} {workspace_root} --run blind --rMin -1 --rMax 1 --rAbsAcc 0.0000005 --cminDefaultMinimizerStrategy 0  #-v +2
 #combine -H AsymptoticLimits -M HybridNew -n {name} {workspace_root} --LHCmode LHC-limits --expectedFromGrid 0.5 #for ecpected, use 0.84 and 0.16
 
 #combine -M MultiDimFit {name}_combine_workspace.root -n .NLLScan --rMin -0.5 --rMax 0.5 --algo grid --points 100
