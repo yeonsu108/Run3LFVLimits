@@ -80,17 +80,17 @@ correlatedSys.extend(['pdf'+str(i) for i in range(1,101)])
 correlatedSys.extend(['muhighpt', 'muonhighscale'])
 
 #options.sysToAvoid.extend(['muonhighscale', 'metUnclust'])
-options.sysToAvoid.extend(['tauidjetUncert1', 'tauidjetHighptstat_bin2', 'tauidjetHighptstat_bin1', 'tauidjetHighptstat', 'tauidjetHighptextrap','tauidjetHighptsyst','tauidjetSystalleras'])
-if options.dataYear == "2022EE":
-    options.sysToAvoid.extend(['tauidjetSystdm12022_postEE', 'tauidjetSystdm112022_postEE', 'tauidjetSystdm102022_postEE', 'tauidjetSystdm02022_postEE', 'tauidjetSyst2022_postEE'])
-elif options.dataYear == "2022":
-    options.sysToAvoid.extend(['tauidjetSystdm12022_preEE', 'tauidjetSystdm112022_preEE', 'tauidjetSystdm102022_preEE', 'tauidjetSystdm02022_preEE', 'tauidjetSyst2022_preEE'])
-elif options.dataYear == "2023BPix":
-    options.sysToAvoid.extend(['tauidjetSystdm12023_postBPix', 'tauidjetSystdm112023_postBPix', 'tauidjetSystdm102023_postBPix', 'tauidjetSystdm02023_postBPix', 'tauidjetSyst2023_postBPix'])
-elif options.dataYear == "2023":
-    options.sysToAvoid.extend(['tauidjetSystdm12023_preBPix', 'tauidjetSystdm112023_preBPix', 'tauidjetSystdm102023_preBPix', 'tauidjetSystdm02023_preBPix', 'tauidjetSyst2023_preBPix'])
-elif options.dataYear == "2024":
-    options.sysToAvoid.extend(['tauidjetSystdm12024', 'tauidjetSystdm112024', 'tauidjetSystdm102024', 'tauidjetSystdm02024', 'tauidjetSyst2024'])
+#options.sysToAvoid.extend(['tauidjetUncert1', 'tauidjetHighptstat_bin2', 'tauidjetHighptstat_bin1', 'tauidjetHighptstat', 'tauidjetHighptextrap','tauidjetHighptsyst','tauidjetSystalleras'])
+#if options.dataYear == "2022EE":
+#    options.sysToAvoid.extend(['tauidjetSystdm12022_postEE', 'tauidjetSystdm112022_postEE', 'tauidjetSystdm102022_postEE', 'tauidjetSystdm02022_postEE', 'tauidjetSyst2022_postEE'])
+#elif options.dataYear == "2022":
+#    options.sysToAvoid.extend(['tauidjetSystdm12022_preEE', 'tauidjetSystdm112022_preEE', 'tauidjetSystdm102022_preEE', 'tauidjetSystdm02022_preEE', 'tauidjetSyst2022_preEE'])
+#elif options.dataYear == "2023BPix":
+#    options.sysToAvoid.extend(['tauidjetSystdm12023_postBPix', 'tauidjetSystdm112023_postBPix', 'tauidjetSystdm102023_postBPix', 'tauidjetSystdm02023_postBPix', 'tauidjetSyst2023_postBPix'])
+#elif options.dataYear == "2023":
+#    options.sysToAvoid.extend(['tauidjetSystdm12023_preBPix', 'tauidjetSystdm112023_preBPix', 'tauidjetSystdm102023_preBPix', 'tauidjetSystdm02023_preBPix', 'tauidjetSyst2023_preBPix'])
+#elif options.dataYear == "2024":
+#    options.sysToAvoid.extend(['tauidjetSystdm12024', 'tauidjetSystdm112024', 'tauidjetSystdm102024', 'tauidjetSystdm02024', 'tauidjetSyst2024'])
 
 
 sysForSMtt = options.sysForSMtt
