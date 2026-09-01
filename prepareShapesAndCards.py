@@ -63,20 +63,26 @@ scale_breakdown = ['mescalemu1ta1', 'mescalemu1ta2', 'mescalemu2ta1', 'mescalemu
                    'renscalemu1ta1', 'renscalemu1ta2', 'renscalemu2ta1', 'renscalemu2ta2',
                    'facscalemu1ta1', 'facscalemu1ta2', 'facscalemu2ta1', 'facscalemu2ta2']
 
-correlatedSys = options.correlatedSys
-if channel == "muon":
-    correlatedSys.extend(['muid', 'muiso', 'mutrg'])
-#else:
-#    correlatedSys.extend(['muid', 'muiso', 'mutrg'])
+correlatedSys = list(options.correlatedSys)
 
-correlatedSys.extend(['jesAbsolute', 'jesAbsolute_'+options.dataYear, 'jesBBEC1', 'jesBBEC1_'+options.dataYear,
-                      'jesFlavorQCD',
-                      'jesFlavorPureGluon', 'jesFlavorPureQuark', 'jesFlavorPureCharm', 'jesFlavorPureBottom',
-                      'jesRelativeBal', 'jesRelativeSample_'+options.dataYear, 'jesHEM'])
+# JME (JES components correlated across all Run 3 eras per JME POG)
+correlated_jes = ['jesAbsolute', 'jesBBEC1', 'jesEC2', 'jesFlavorQCD', 'jesHF', 'jesRelativeBal', 'jesHEM',
+                  'jesFlavorPureGluon', 'jesFlavorPureQuark', 'jesFlavorPureCharm', 'jesFlavorPureBottom']
+for j in correlated_jes:
+    correlatedSys.extend([j, j + '_v12_', j + '_v15_'])
 
-correlatedSys.extend(['btagcferr1','btagcferr2','btaghf','btaglf'])
+# BTV POG: Fixed-WP btagcorr, btagtype3, btagbfrag are correlated across Run 3
+# (btaguncorr, btagstat are uncorrelated per era)
+correlated_btag = ['btagcorr', 'btagtype3', 'btagbfrag',
+                   'btagcferr1', 'btagcferr2', 'btaghf', 'btaglf']
+correlatedSys.extend(correlated_btag)
+
+# TAU POG: DeepTau v2.5 era-independent systematics are correlated across all eras
+correlated_tau = ['tauidjetSystalleras', 'tauidjetHighptsyst', 'tauidjetHighptextrap']
+correlatedSys.extend(correlated_tau)
+
 correlatedSys.extend(scale_breakdown)
-correlatedSys.extend(['pdf'+str(i) for i in range(1,101)])
+correlatedSys.extend(['pdf'+str(i) for i in range(1, 101)])
 correlatedSys.extend(['muhighpt', 'muonhighscale'])
 
 #options.sysToAvoid.extend(['muonhighscale', 'metUnclust'])
@@ -151,16 +157,30 @@ else:
 processes_mapping = {
     'tt': ['hist_TTto2L2Nu.root', 'hist_TTtoLNu2Q.root'],
     'singleTop': [
-        'hist_TBbarQ_t-channel.root', 'hist_TBbar_s-channel.root', 'hist_TQbarto2Q-t-channel.root',
-        'hist_TQbartoLNu-t-channel.root', 'hist_TbarBQ_t-channel.root', 'hist_TbarB_s-channel.root',
-        'hist_TbarQto2Q-t-channel.root', 'hist_TbarQtoLNu-t-channel.root', 'hist_TWminusto2L2Nu.root',
-        'hist_TWminusto4Q.root', 'hist_TWminustoLNu2Q.root', 'hist_TbarWplusto2L2Nu.root',
-        'hist_TbarWplusto4Q.root', 'hist_TbarWplustoLNu2Q.root'
+        # s-channel
+        'hist_TBbar_s-channel.root', 'hist_TbarB_s-channel.root',
+        'hist_TBbarto2Q_s-channel.root', 'hist_TBbartoLNu_s-channel.root',
+        'hist_TbarBto2Q_s-channel.root', 'hist_TbarBtoLNu_s-channel.root',
+        # t-channel decay-split (2022-2023 naming)
+        'hist_TQbarto2Q-t-channel.root', 'hist_TQbartoLNu-t-channel.root',
+        'hist_TbarQto2Q-t-channel.root', 'hist_TbarQtoLNu-t-channel.root',
+        # t-channel decay-split (2024 naming)
+        'hist_TBbarQto2Q_t-channel.root', 'hist_TBbarQtoLNu_t-channel.root',
+        'hist_TbarBQto2Q_t-channel.root', 'hist_TbarBQtoLNu_t-channel.root',
+        # tW
+        'hist_TWminusto2L2Nu.root', 'hist_TWminusto4Q.root', 'hist_TWminustoLNu2Q.root',
+        'hist_TbarWplusto2L2Nu.root', 'hist_TbarWplusto4Q.root', 'hist_TbarWplustoLNu2Q.root'
     ],
     'other': [
         'hist_TTto4Q.root', 'hist_WW.root', 'hist_WZ.root', 'hist_ZZ.root',
+        # DY (2022-2023 & 2024 naming)
         'hist_DYto2L-2Jets_MLL-10to50.root', 'hist_DYto2L-2Jets_MLL-50.root',
+        'hist_DYto2E-2Jets_MLL-10-50.root', 'hist_DYto2E-2Jets_MLL-50.root',
+        'hist_DYto2Mu-2Jets_MLL-10-50.root', 'hist_DYto2Mu-2Jets_MLL-50.root',
+        'hist_DYto2Tau-2Jets_MLL-10-50.root', 'hist_DYto2Tau-2Jets_MLL-50.root',
+        # W+Jets (2022-2023 & 2024 naming)
         'hist_WtoLNu-2Jets_0J.root', 'hist_WtoLNu-2Jets_1J.root', 'hist_WtoLNu-2Jets_2J.root',
+        'hist_WtoENu-4Jets.root', 'hist_WtoMuNu-4Jets.root', 'hist_WtoTauNu-4Jets.root',
         'hist_TTHto2B.root', 'hist_TTHtoNon2B.root', 'hist_TTWtoQQ.root', 'hist_TTZtoQQ.root',
         'hist_QCD_.*'
     ],
@@ -169,15 +189,24 @@ processes_mapping = {
 processes_mapping.update(sig_map)
 print (processes_mapping)
 
-#processes_mapping['misID'] = ['hist_fake_'+i.replace('hist_', '') for i in processes_mapping['singleTop'] + processes_mapping['other']]
-#processes_mapping['misID_tt'] = ['hist_fake_'+i.replace('hist_', '') for i in processes_mapping['tt']]
-
 smTTlist = ['tt'] # for systematics affecting only SM tt
-#smTTlist = ['tt', 'misID_tt'] # for systematics affecting only SM tt
 lfvlist = ['st_lfv_cs','st_lfv_ct','st_lfv_cv','st_lfv_uv','st_lfv_ut','st_lfv_us']
 
 if options.applyxsec:
-    # Read Xsec file
+    # Auto-resolve xsecfile if default is used
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    if options.xsecfile == 'files24_mu.yml':
+        if options.dataYear == '2024':
+            options.xsecfile = 'files24_mu.yml' if channel == 'muon' else 'files24_el.yml'
+        else:
+            options.xsecfile = 'files_mu.yml' if channel == 'muon' else 'files_el.yml'
+
+    if not os.path.exists(options.xsecfile):
+        cand = os.path.join(script_dir, options.xsecfile)
+        if os.path.exists(cand):
+            options.xsecfile = cand
+
+    print("Loading cross section file: %s" % options.xsecfile)
     with open(options.xsecfile, 'r') as xsec_file:
         xsec_data = yaml.safe_load(xsec_file)
     if not xsec_data:
@@ -624,12 +653,20 @@ mv DNN_logx_logy.png DNN_{signal}_{year}_logx_logy.png
 
 def CMSNamingConvention(syst, options):
     syst_year = 'Y' + options.dataYear
-    if syst not in correlatedSys:
-        return syst_year + '_' + syst
+
+    # Standardize versioned JES names so they match across eras (e.g. jesAbsolute_v12_ -> jesAbsolute)
+    std_syst = syst
+    for j in ['jesAbsolute', 'jesBBEC1', 'jesEC2', 'jesFlavorQCD', 'jesHF', 'jesRelativeBal', 'jesHEM']:
+        if syst.startswith(j) and ('_v12_' in syst or '_v15_' in syst):
+            std_syst = j
+            break
+
+    if syst in correlatedSys or std_syst in correlatedSys or any(syst.startswith(c) for c in ['pdf', 'mescale', 'renscale', 'facscale']):
+        return std_syst
     elif options.dataYear in syst:
         return syst_year + '_' + syst
     else:
-        return syst
+        return syst_year + '_' + syst
 
     # postfit fully uncorrelate unc
     #if syst not in correlatedSys:

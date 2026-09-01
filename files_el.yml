@@ -143,21 +143,21 @@
   yields-group: '5Single Top'
   order: 10
 
-'hist_TBbarQ_t-channel.root':
-  type: mc
-  pretty-name: 'SingleTopt'
-  cross-section: 123.8
-  group: GSingleT
-  yields-group: '5Single Top'
-  order: 11
-
-'hist_TbarBQ_t-channel.root':
-  type: mc
-  pretty-name: 'SingleTbart'
-  cross-section: 75.47
-  group: GSingleT
-  yields-group: '5Single Top'
-  order: 12
+#'hist_TBbarQ_t-channel.root':
+#  type: mc
+#  pretty-name: 'SingleTopt'
+#  cross-section: 123.8
+#  group: GSingleT
+#  yields-group: '5Single Top'
+#  order: 11
+#
+#'hist_TbarBQ_t-channel.root':
+#  type: mc
+#  pretty-name: 'SingleTbart'
+#  cross-section: 75.47
+#  group: GSingleT
+#  yields-group: '5Single Top'
+#  order: 12
 
 'hist_TQbarto2Q-t-channel.root':
   type: mc
