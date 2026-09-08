@@ -71,10 +71,8 @@ correlated_jes = ['jesAbsolute', 'jesBBEC1', 'jesEC2', 'jesFlavorQCD', 'jesHF', 
 for j in correlated_jes:
     correlatedSys.extend([j, j + '_v12_', j + '_v15_'])
 
-# BTV POG: Fixed-WP btagcorr, btagtype3, btagbfrag are correlated across Run 3
-# (btaguncorr, btagstat are uncorrelated per era)
-correlated_btag = ['btagcorr', 'btagtype3', 'btagbfrag',
-                   'btagcferr1', 'btagcferr2', 'btaghf', 'btaglf']
+# BTV POG: Fixed-WP btagcorr is correlated across Run 3 (btaguncorr is uncorrelated per era)
+correlated_btag = ['btagcorr']
 correlatedSys.extend(correlated_btag)
 
 # TAU POG: DeepTau v2.5 era-independent systematics are correlated across all eras
