@@ -515,13 +515,12 @@ def prepareShapes(backgrounds, signals, discriminant, discriminantName):
                 cb.cp().AddSyst(cb, 'lumi_2', 'lnN', ch.SystMap()(1.0068))
                 cb.cp().AddSyst(cb, 'lumi_3', 'lnN', ch.SystMap()(1.0144))
 
-            cb.cp().AddSyst(cb, 'xsec_tt', 'lnN', ch.SystMap('process')(['tt'], 1.044))
-            cb.cp().AddSyst(cb, 'xsec_ttX', 'lnN', ch.SystMap('process')(['TTX'], 1.2))
-            cb.cp().AddSyst(cb, 'xsec_vv', 'lnN', ch.SystMap('process')(['vv'], 1.1))
-            cb.cp().AddSyst(cb, 'xsec_dy', 'lnN', ch.SystMap('process')(['DY'], 1.1))
-            cb.cp().AddSyst(cb, 'xsec_wjets', 'lnN', ch.SystMap('process')(['wJets'], 1.1))
-            cb.cp().AddSyst(cb, 'xsec_singleTop', 'lnN', ch.SystMap('process')(['singleTop'], 1.1))
-            cb.cp().AddSyst(cb, 'xsec_Other', 'lnN', ch.SystMap('process')(['other'], 1.1))
+            # Cross section normalization uncertainties (Run 3 values aligned with AN and references)
+            cb.cp().AddSyst(cb, 'xsec_tt', 'lnN', ch.SystMap('process')(['tt'], 1.05)) # Run 3 NNLO+NNLL ~5%
+            cb.cp().AddSyst(cb, 'xsec_singleTop', 'lnN', ch.SystMap('process')(['singleTop'], 1.25)) # Run 3 AN prior 25%
+            cb.cp().AddSyst(cb, 'xsec_Other', 'lnN', ch.SystMap('process')(['other'], 1.30)) # W+jets, diboson, DY 30% prior
+            # Note: Individual TTX (ttH, ttW, ttZ), vv, dy, wjets are merged into 'other' in Combine;
+            # detailed sub-components are granularly separated in plotIt configs.
 
             #cb.cp().AddSyst(cb, 'rate_misID', 'rateParam', ch.SystMap('process')(['misID'], 1.0))
             #cb.cp().AddSyst(cb, 'rate_misID_tt', 'rateParam', ch.SystMap('process')(['misID_tt'], 1.0))
