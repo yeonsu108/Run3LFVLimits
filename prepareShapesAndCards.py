@@ -59,14 +59,14 @@ if not options.channel and 'muon' in options.root_path: channel = "muon"
 else: channel = "electron"
 
 
-scale_breakdown = ['mescalemu1ta1', 'mescalemu1ta2', 'mescalemu2ta1', 'mescalemu2ta2',
-                   'renscalemu1ta1', 'renscalemu1ta2', 'renscalemu2ta1', 'renscalemu2ta2',
-                   'facscalemu1ta1', 'facscalemu1ta2', 'facscalemu2ta1', 'facscalemu2ta2']
+# Note: scale_breakdown (12 pt-binned mu/tau scale variations) was Run 2 legacy and is superseded by inclusive mescale/renscale/facscale.
 
 correlatedSys = list(options.correlatedSys)
 
 # JME (JES components correlated across all Run 3 eras per JME POG)
-correlated_jes = ['jesAbsolute', 'jesBBEC1', 'jesEC2', 'jesFlavorQCD', 'jesHF', 'jesRelativeBal', 'jesHEM',
+# Note: jesHEM was 2018 Run 2 only (HCAL issue repaired in LS2) and is excluded in Run 3.
+# Note: jesFlavorQCD was Run 2 legacy and is superseded by 4 jesFlavorPure* sources in Run 3.
+correlated_jes = ['jesAbsolute', 'jesBBEC1', 'jesEC2', 'jesHF', 'jesRelativeBal',
                   'jesFlavorPureGluon', 'jesFlavorPureQuark', 'jesFlavorPureCharm', 'jesFlavorPureBottom']
 for j in correlated_jes:
     correlatedSys.extend([j, j + '_v12_', j + '_v15_'])
@@ -78,8 +78,6 @@ correlatedSys.extend(correlated_btag)
 # TAU POG: DeepTau v2.5 era-independent systematics are correlated across all eras
 correlated_tau = ['tauidjetSystalleras', 'tauidjetHighptsyst', 'tauidjetHighptextrap']
 correlatedSys.extend(correlated_tau)
-
-correlatedSys.extend(scale_breakdown)
 correlatedSys.extend(['pdf'+str(i) for i in range(1, 101)])
 correlatedSys.extend(['muhighpt', 'muonhighscale'])
 
@@ -98,11 +96,9 @@ correlatedSys.extend(['muhighpt', 'muonhighscale'])
 
 
 sysForSMtt = options.sysForSMtt
-sysForSMtt.extend(scale_breakdown)
 sysForSMtt.extend(['pdf'+str(i) for i in range(1,101)])
 
 sysForSig = options.sysForSig
-sysForSig.extend(scale_breakdown)
 sysForSig.extend(['pdf'+str(i) for i in range(1,101)])
 
 
@@ -332,6 +328,16 @@ def prepareFile(processes_map, categories_map, root_path, discriminant):
                     if histograms[category] != nominal_name:
                         raise Exception("The regular expression used for category %r matches more than one histogram: %r and %r" % (category, nominal_name, histograms[category]))
                 histograms[category] = nominal_name
+
+    # Also check if external systematic files exist for tt processes (hdamp, tune)
+    for ext_s in ['hdamp', 'tune']:
+        for proc in smTTlist:
+            if proc in processes_files:
+                for pf in processes_files[proc]:
+                    if os.path.exists(pf.replace('.root', '__' + ext_s + 'up.root')):
+                        systematics.add(ext_s)
+                        break
+
     print("Found the following systematics in rootfiles: ", systematics)
     if options.sysToAvoid:
         for sysToAvoid in options.sysToAvoid:
@@ -376,6 +382,17 @@ def prepareFile(processes_map, categories_map, root_path, discriminant):
                         for variation in ['up', 'down']:
                             key = CMSNamingConvention(systematic,options) + variation.capitalize()
                             TH1_syst = f.Get(original_histogram_name + '__' + systematic + variation)
+                            if not TH1_syst:
+                                # Check if separate external systematic file exists (e.g. hist_TTto2L2Nu__hdampup.root)
+                                ext_filename = process_file.replace('.root', '__' + systematic + variation + '.root')
+                                if os.path.exists(ext_filename):
+                                    f_ext = ROOT.TFile.Open(ext_filename)
+                                    if f_ext and not f_ext.IsZombie():
+                                        h_ext = f_ext.Get(original_histogram_name)
+                                        if h_ext:
+                                            TH1_syst = h_ext.Clone(original_histogram_name + '__' + systematic + variation)
+                                            TH1_syst.SetDirectory(ROOT.nullptr)
+                                    if f_ext: f_ext.Close()
                             if not TH1_syst:
                                 # Some of misID processes are empty, just continue
                                 print("EMPTY HISTO!!!!: ", process_file, original_histogram_name + '__' + systematic + variation)
@@ -483,8 +500,8 @@ def prepareShapes(backgrounds, signals, discriminant, discriminantName):
         # Systematics
         if not options.nosys:
             for systematic in systematics:
-                if any(s_ == systematic for s_ in ['mescale', 'renscale', 'facscale', 'jesFlavorQCD']): continue
-                #if any(s_ == systematic for s_ in ['jesFlavorQCD']): continue #for postfit
+                # Guard against legacy Run 2 pt-binned scale variations if present
+                if any(sub in systematic for sub in ['mu1ta1', 'mu1ta2', 'mu2ta1', 'mu2ta2']): continue
                 systematic_only_for_SMtt = False
                 systematic_only_for_Sig = False
 
@@ -653,7 +670,7 @@ def CMSNamingConvention(syst, options):
 
     # Standardize versioned JES names so they match across eras (e.g. jesAbsolute_v12_ -> jesAbsolute)
     std_syst = syst
-    for j in ['jesAbsolute', 'jesBBEC1', 'jesEC2', 'jesFlavorQCD', 'jesHF', 'jesRelativeBal', 'jesHEM']:
+    for j in correlated_jes:
         if syst.startswith(j) and ('_v12_' in syst or '_v15_' in syst):
             std_syst = j
             break
