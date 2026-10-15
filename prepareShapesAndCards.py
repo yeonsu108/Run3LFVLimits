@@ -55,8 +55,11 @@ parser.add_argument('-dataYear' , action='store', dest='dataYear', type=str, def
 options = parser.parse_args()
 
 channel = options.channel
-if not options.channel and 'muon' in options.root_path: channel = "muon"
-else: channel = "electron"
+if not channel:
+    if 'muon' in options.root_path:
+        channel = "muon"
+    else:
+        channel = "electron"
 
 
 # Note: scale_breakdown (12 pt-binned mu/tau scale variations) was Run 2 legacy and is superseded by inclusive mescale/renscale/facscale.
@@ -79,7 +82,10 @@ correlatedSys.extend(correlated_btag)
 correlated_tau = ['tauidjetSystalleras', 'tauidjetHighptsyst', 'tauidjetHighptextrap']
 correlatedSys.extend(correlated_tau)
 correlatedSys.extend(['pdf'+str(i) for i in range(1, 101)])
-correlatedSys.extend(['muhighpt', 'muonhighscale'])
+# MUO POG: Muon momentum scale and ID/Iso/Trg systematic uncertainties correlated across Run 3
+correlatedSys.extend(['muhighpt', 'muonhighscale', 'muonscale', 'muid_syst', 'muiso_syst', 'mutrg_syst'])
+# EGM POG: Electron energy scale and ID/RECO systematic uncertainties correlated across Run 3
+correlatedSys.extend(['elescale', 'elecid_syst', 'elecreco_syst'])
 
 #options.sysToAvoid.extend(['muonhighscale', 'metUnclust'])
 #options.sysToAvoid.extend(['tauidjetUncert1', 'tauidjetHighptstat_bin2', 'tauidjetHighptstat_bin1', 'tauidjetHighptstat', 'tauidjetHighptextrap','tauidjetHighptsyst','tauidjetSystalleras'])
@@ -329,13 +335,18 @@ def prepareFile(processes_map, categories_map, root_path, discriminant):
                         raise Exception("The regular expression used for category %r matches more than one histogram: %r and %r" % (category, nominal_name, histograms[category]))
                 histograms[category] = nominal_name
 
-    # Also check if external systematic files exist for tt processes (hdamp, tune)
-    for ext_s in ['hdamp', 'tune']:
-        for proc in smTTlist:
+    # Also check if external systematic files exist for tt processes (hdamp, tune), tau energy scale (tes), or lepton scale/smearing
+    for ext_s in ['hdamp', 'tune', 'tes', 'muonscale', 'muonsmear', 'elescale', 'elesmear']:
+        target_procs = smTTlist if ext_s in ['hdamp', 'tune'] else [p for p in processes_files if 'data' not in p]
+        found_ext = False
+        for proc in target_procs:
+            if found_ext:
+                break
             if proc in processes_files:
                 for pf in processes_files[proc]:
                     if os.path.exists(pf.replace('.root', '__' + ext_s + 'up.root')):
                         systematics.add(ext_s)
+                        found_ext = True
                         break
 
     print("Found the following systematics in rootfiles: ", systematics)
